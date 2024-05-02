@@ -23,10 +23,6 @@ type GetDriveResponseBody struct {
 	Route interface{} `json:"route"`
 }
 
-type ParametersErrorResponse struct {
-	Errors []string `json:"errors"`
-}
-
 func PostAddHandler(w http.ResponseWriter, r *http.Request) {
 	var requestBody PostAddRequestBody
 

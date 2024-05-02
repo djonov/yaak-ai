@@ -13,7 +13,7 @@ func MakeTestRequest(method string, path string, requestBody string, f http.Hand
 	var req *http.Request
 	var err error
 
-	if method == "GET" {
+	if requestBody == "" {
 		// Create a request without a request body
 		req, err = http.NewRequest(method, path, nil)
 	} else {

@@ -2,6 +2,7 @@ package tasks
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -24,11 +25,13 @@ type GetDriveResponseBody struct {
 }
 
 func PostAddHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("[Controller.PostAddHandler] Status: started")
 	var requestBody PostAddRequestBody
 
 	// Decode the JSON request body
 	err := json.NewDecoder(r.Body).Decode(&requestBody)
 	if err != nil {
+		log.Printf("[Controller.PostAddHandler] Status: failed, Error: Malformed JSON")
 		http.Error(w, "Malformed JSON", http.StatusBadRequest)
 		return
 	}
@@ -38,6 +41,7 @@ func PostAddHandler(w http.ResponseWriter, r *http.Request) {
 	if err := validate.Struct(requestBody); err != nil {
 		validationErrors := err.(validator.ValidationErrors)
 		http.Error(w, validationErrors.Error(), http.StatusBadRequest)
+		log.Printf("[Controller.PostAddHandler] Status: failed, Error: %s", validationErrors.Error())
 		return
 	}
 
@@ -49,13 +53,17 @@ func PostAddHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(responseBody)
+	log.Printf("[Controller.PostAddHandler] Status: success")
 }
 
 func GetDriveHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("[Controller.GetDriveHandler] Status: started")
+
 	// Extract id path param from URL
 	idStr := strings.TrimPrefix(r.URL.Path, "/task/drive/")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
+		log.Printf("[Controller.GetDriveHandler] Status: failed, Error: Invalid ID")
 		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		return
 	}
@@ -68,4 +76,5 @@ func GetDriveHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(responseBody)
+	log.Printf("[Controller.GetDriveHandler] Status: success")
 }

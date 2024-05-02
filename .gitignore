@@ -22,3 +22,6 @@ go.work
 
 # MacOS Desktop Services Store
 .DS_Store
+
+# Generated executable go file
+server

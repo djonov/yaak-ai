@@ -3,6 +3,8 @@ package tasks
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -14,6 +16,11 @@ type PostAddRequestBody struct {
 
 type PostAddResponseBody struct {
 	Result int `json:"result"`
+}
+
+type GetDriveResponseBody struct {
+	Id    int         `json:"id"`
+	Route interface{} `json:"route"`
 }
 
 type ParametersErrorResponse struct {
@@ -43,6 +50,25 @@ func PostAddHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Create the response body
 	responseBody := PostAddResponseBody{Result: sum}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(responseBody)
+}
+
+func GetDriveHandler(w http.ResponseWriter, r *http.Request) {
+	// Extract id path param from URL
+	idStr := strings.TrimPrefix(r.URL.Path, "/task/drive/")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	// Get external service response
+	routeData := GetDriveById()
+
+	// Create the response body
+	responseBody := GetDriveResponseBody{Id: id, Route: routeData}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(responseBody)

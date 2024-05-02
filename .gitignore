@@ -25,3 +25,6 @@ go.work
 
 # Generated executable go file
 server
+
+# Env files
+.env

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 )
 
@@ -38,4 +39,11 @@ func CheckStatusCode(actual int, expected int, t *testing.T) {
 		t.Errorf("handler returned wrong status code: got %v want %v",
 			actual, expected)
 	}
+}
+
+func SetEnvVariables() {
+	os.Setenv("GET_DRIVE_BY_ID_URL", "http://localhost")
+	os.Setenv("EXTERNAL_SERVICE_API_KEY", "123abc")
+	os.Setenv("EXTERNAL_SERVICE_WORK_TASK_AUTH", "123abc")
+	os.Setenv("MAX_AMOUNT_OF_RETRIES", "10")
 }

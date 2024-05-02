@@ -20,7 +20,7 @@ func TestGetDriveHandler_Success(t *testing.T) {
 	// Get config to get env variables
 	cfg, err := config.GetConfig()
 	if err != nil {
-		log.Fatalf("error loading configuration: %v", err)
+		log.Fatalf("[Tests.TestGetDriveHandler_Success] Info: error loading configuration: %v", err)
 	}
 
 	// Disable default HTTP interceptors

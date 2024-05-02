@@ -3,7 +3,9 @@ package helpers
 import (
 	"encoding/json"
 	"log"
+	"math/rand"
 	"net/http"
+	"time"
 )
 
 type RequestParams struct {
@@ -12,10 +14,10 @@ type RequestParams struct {
 	Headers http.Header
 }
 
-func RequestRepeater(params RequestParams, retries int) interface{} {
+func RequestRepeater(params RequestParams, maxRetries int, delayInSeconds int32) interface{} {
 	var responseBody interface{}
 
-	for i := 0; i < retries; i++ {
+	for i := 0; i < maxRetries; i++ {
 		response := MakeRequest(params.Url, params.Method, params.Headers)
 		if response.StatusCode == http.StatusOK {
 			defer response.Body.Close()
@@ -24,7 +26,10 @@ func RequestRepeater(params RequestParams, retries int) interface{} {
 				log.Fatal(err)
 			}
 			return responseBody
-		} else if response.StatusCode != http.StatusTooManyRequests {
+		} else if response.StatusCode == http.StatusTooManyRequests {
+			log.Printf("[HttpClient.RequesterRepeater] URL: %s, Method: %s, Info: sleeping for %d seconds because of a 429 status code", params.Url, params.Method, delayInSeconds)
+			time.Sleep(time.Duration(rand.Int31n(delayInSeconds)) * time.Second)
+		} else {
 			return nil
 		}
 	}

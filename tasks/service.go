@@ -15,7 +15,7 @@ func GetDriveById() interface{} {
 	// Get config environment variables
 	cfg, err := config.GetConfig()
 	if err != nil {
-		log.Fatalf("error loading configuration: %v", err)
+		log.Fatalf("[Service.GetDriveById] Info: error loading configuration: %v", err)
 	}
 
 	// Preparing headers
@@ -25,7 +25,7 @@ func GetDriveById() interface{} {
 	requestParams := helpers.RequestParams{Url: cfg.GET_DRIVE_BY_ID_URL, Method: "GET", Headers: headers}
 
 	// Run HTTP request in repeater wrapper to avoid flaky service
-	response := helpers.RequestRepeater(requestParams, cfg.MAX_AMOUNT_OF_RETRIES)
+	response := helpers.RequestRepeater(requestParams, cfg.MAX_AMOUNT_OF_RETRIES, int32(cfg.REPEAT_REQUEST_SECONDS_DELAY))
 
 	return response
 }

@@ -1,7 +1,7 @@
 # Start from the official Golang image
 FROM golang:latest
 
-# Set the Current Working Directory inside the container
+# Set the current working directory inside the container
 WORKDIR /app
 
 # Copy whole local directory to the container
@@ -13,7 +13,7 @@ RUN go mod download
 # Build the Go app
 RUN go build -o server ./cmd/server
 
-# Expose port 9595 to the outside world
+# Expose port 9595
 EXPOSE 9595
 
 # Command to run the executable

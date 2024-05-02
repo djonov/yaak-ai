@@ -46,4 +46,5 @@ func SetEnvVariables() {
 	os.Setenv("EXTERNAL_SERVICE_API_KEY", "123abc")
 	os.Setenv("EXTERNAL_SERVICE_WORK_TASK_AUTH", "123abc")
 	os.Setenv("MAX_AMOUNT_OF_RETRIES", "10")
+	os.Setenv("REPEAT_REQUEST_SECONDS_DELAY", "3")
 }

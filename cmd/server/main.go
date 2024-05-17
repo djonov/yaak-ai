@@ -15,6 +15,7 @@ func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", HealthCheckHandler)
+	RegisterRoutes(mux)
 	log.Println("server starting...")
 	log.Fatal(http.ListenAndServe(":9595", mux))
 }
